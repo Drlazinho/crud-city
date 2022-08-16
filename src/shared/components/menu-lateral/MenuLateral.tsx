@@ -10,27 +10,66 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material'
+import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom'
 import { Box } from '@mui/system'
-import { useDrawerContext } from '../../context';
+
+import React from 'react'
+import { useDrawerContext } from '../../context'
 
 interface IMenuLateral {
   children: React.ReactNode
 }
 
-export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
-  const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down('sm'));
+interface IListItemLinkProps {
+  to: string
+  icon: string
+  label: string
+  onClick: (() => void) | undefined
+}
+const ListItemLink: React.FC<IListItemLinkProps> = ({
+  to,
+  icon,
+  label,
+  onClick
+}) => {
+  const navigate = useNavigate()
 
-  const {isDrawerOpen, toggleDrawerOpen} = useDrawerContext();
+  const resolvedPath = useResolvedPath(to)
+  const match = useMatch({ path: resolvedPath.pathname, end: false })
+
+  const handleClick = () => {
+    navigate(to)
+    onClick?.()
+  }
+
+  return (
+    <ListItemButton selected={!!match} onClick={handleClick}>
+      <ListItemIcon>
+        <Icon>{icon}</Icon>
+      </ListItemIcon>
+      <ListItemText primary={label} />
+    </ListItemButton>
+  )
+}
+
+export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
+  const theme = useTheme()
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const { isDrawerOpen, drawerOptions, toggleDrawerOpen } = useDrawerContext()
 
   return (
     <>
-      <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : "permanent"} onClose={toggleDrawerOpen}>
+      <Drawer
+        open={isDrawerOpen}
+        variant={smDown ? 'temporary' : 'permanent'}
+        onClose={toggleDrawerOpen}
+      >
         <Box
           width={theme.spacing(28)}
+          height="100%"
           display="flex"
           flexDirection="column"
-          height="100%"
         >
           <Box
             width="100%"
@@ -41,20 +80,23 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
           >
             <Avatar
               sx={{ height: theme.spacing(12), width: theme.spacing(12) }}
-              src="https://cdn.icon-icons.com/icons2/1983/PNG/512/_123049.png"
+              src="https://yt3.ggpht.com/yti/AJo0G0nEf2YchMrqLzEK9fiRStX6YLFqtF06uh5sqguTnw=s88-c-k-c0x00ffffff-no-rj-mo"
             />
           </Box>
-          
+
           <Divider />
 
           <Box flex={1}>
             <List component="nav">
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>home</Icon>
-                </ListItemIcon>
-                <ListItemText primary="Página Inicial" />
-              </ListItemButton>
+              {drawerOptions.map(drawerOption => (
+                <ListItemLink
+                  to={drawerOption.path}
+                  key={drawerOption.path}
+                  icon={drawerOption.icon}
+                  label={drawerOption.label}
+                  onClick={smDown ? toggleDrawerOpen : undefined}
+                />
+              ))}
             </List>
           </Box>
         </Box>
