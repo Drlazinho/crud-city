@@ -10,7 +10,7 @@ interface IFerramentasDeDetalhesProps {
 
   aoClicarEmNovo?: () => void
   aoClicarEmVoltar?: () => void
-  aoClicarEmApagar: () => void
+  aoClicarEmApagar?: () => void
   aoClicarEmSalvar?: () => void
   aoClicarEmSalvarEFechar?: () => void
 }
