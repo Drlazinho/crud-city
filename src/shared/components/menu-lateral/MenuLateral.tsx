@@ -14,7 +14,7 @@ import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom'
 import { Box } from '@mui/system'
 
 import React from 'react'
-import { useDrawerContext } from '../../context'
+import { useAppThemeContext, useDrawerContext } from '../../context'
 
 interface IMenuLateral {
   children: React.ReactNode
@@ -58,6 +58,8 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
 
   const { isDrawerOpen, drawerOptions, toggleDrawerOpen } = useDrawerContext()
 
+  const { toggleTheme } = useAppThemeContext()
+
   return (
     <>
       <Drawer
@@ -97,6 +99,17 @@ export const MenuLateral: React.FC<IMenuLateral> = ({ children }) => {
                   onClick={smDown ? toggleDrawerOpen : undefined}
                 />
               ))}
+            </List>
+          </Box>
+
+          <Box>
+            <List component="nav">
+              <ListItemButton onClick={toggleTheme}>
+                <ListItemIcon>
+                  <Icon>dark_mode</Icon>
+                </ListItemIcon>
+                <ListItemText primary="Alternar Tema" />
+              </ListItemButton>
             </List>
           </Box>
         </Box>
