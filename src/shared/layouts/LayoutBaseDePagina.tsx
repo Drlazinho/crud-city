@@ -6,7 +6,7 @@ import { useDrawerContext } from "../context";
 interface ILayoutBaseDePaginaProps {
   titulo: string;
   barraDeFerramentas?: ReactNode;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 
