@@ -11,7 +11,18 @@ export const ListagemDePessoas: React.FC = () => {
     return searchParams.get('busca') || '';
   }, [searchParams]);
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+
+    PessoasService.getAll(1, busca)
+    .then((result) => {
+      if(result instanceof Error) {
+        alert(result.message)
+      }
+      else {
+        console.log(result)
+      }
+    });
+  }, [busca]);
 
   return (
     <LayoutBaseDePagina
